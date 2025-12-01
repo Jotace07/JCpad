@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once 'autoload.php';
 
 
@@ -24,9 +26,12 @@ switch($route){
                 $auth = new AuthController();
                 $logged = $auth->login($username, $password);
                 if($logged){
-                    $controller->render('dashboard');
+                    $_SESSION['logged'] = true;
+                    header('Location: /dashboard');
+                    die;
                 }else{
-                    $controller->render('login');
+                    header('Location: /login');
+                    die;
                 }
             }
 
@@ -46,12 +51,12 @@ switch($route){
         break;
 
     case '/dashboard':
-        $auth = new AuthController();
-        if($auth->cehckAuth()){
-            $controller->render('dashboard');
-        }else{
-            header('Location: /login');
-        }
+        if(!$_SESSION['logged']){
+       header('Location: /login');
+        die;
+    }else{
+        $controller->render('dashboard');
+    }
         break;
 
     default:

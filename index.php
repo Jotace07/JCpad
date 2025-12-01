@@ -2,8 +2,8 @@
 require_once 'autoload.php';
 
 
-
 $route = $_SERVER['REQUEST_URI'];
+$controller = new ViewController();
 
 switch($route){
     case '/':
@@ -17,32 +17,27 @@ switch($route){
         break;
 
     case '/login':
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            if (isset($_POST['username']) && isset($_POST['password'])) {
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            if (isset($_POST['username']) && isset($_POST['password'])){
                 $username = htmlspecialchars($_POST['username']);
                 $password = htmlspecialchars($_POST['password']);
-                $userClass = new User();
-                $result = $userClass->getUserByUsername($username);
-                if ($result) {
-                    if(password_verify($password, $result[0]['password'])){
-                        echo 'Logged in!';
-                    }else{
-                        echo 'Wrong passowrd!';
-                    }
+                $auth = new AuthController();
+                $logged = $auth->login($username, $password);
+                if($logged){
+                    $controller->render('dashboard');
                 }else{
-                    echo "User don't exist!";
+                    $controller->render('login');
                 }
             }
 
         }else{
-            $controller = new ViewController();
             $controller->render('login');
         
         }
         break;
     
     case '/register':
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
             echo 'Faça o cadastro!!!';
         }else{
             $controller = new ViewController();
@@ -53,7 +48,6 @@ switch($route){
     case '/dashboard':
         $auth = new AuthController();
         if($auth->cehckAuth()){
-            $controller = new ViewController();
             $controller->render('dashboard');
         }else{
             header('Location: /login');

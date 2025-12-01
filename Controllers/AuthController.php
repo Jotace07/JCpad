@@ -7,18 +7,15 @@ class AuthController {
     public $user_id;
 
     public function login($username, $password){
-        $userModel = new User();
-        $user = $userModel->getUserByUsername($username);
-        if($user){
 
-            if($user['password'] === $password){
-                $this->is_auth = true;
-                $this->username = $user['username'];
-                $this->user_id = $user['id'];
+        $userClass = new User();
+        $result = $userClass->getUserByUsername($username);
+        if ($result) {
+            if(password_verify($password, $result[0]['password'])){
                 return true;
-
+            }else{
+                return false;
             }
-
         }else{
             return false;
         }

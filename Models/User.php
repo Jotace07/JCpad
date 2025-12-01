@@ -19,14 +19,15 @@ class User {
     }
 
     public function getUserByUsername($username){
-        $sql = "SELECT * FROM users WHERE username = :username";
+        $sql = "SELECT * FROM users WHERE username = :username OR email = :email";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $username);
         $stmt->execute();
         $user = $stmt->fetchAll();
         return $user;
     }
-
+    
         
     public function __destruct(){
 

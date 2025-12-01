@@ -1,10 +1,10 @@
 <?php    
 
 class Database {
-    private static $host = '192.168.20.106';
+    private static $host = 'localhost';
     private static $database = 'jc_company';
     private static $username = 'jc_database';
-    private static $password = 'jc_company';
+    private static $password = 'jc';
 
     /**
     *@return PDO|null 'retornar null em caso de falha'.

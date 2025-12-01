@@ -2,6 +2,7 @@
 require_once 'autoload.php';
 
 
+
 $route = $_SERVER['REQUEST_URI'];
 
 switch($route){
@@ -17,15 +18,20 @@ switch($route){
 
     case '/login':
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            $request = file_get_contents('php://input');
-            $data_obj = json_decode($request);
-            $auth = new AuthController();
-            $result = $auth->login($data_obj->username, $data_obj->password);
-            if($result){
-                echo 'Login realizado com sucesso!';
-
-            }else{
-                echo 'Login ou senha inválido!';
+            if (isset($_POST['username']) && isset($_POST['password'])) {
+                $username = htmlspecialchars($_POST['username']);
+                $password = htmlspecialchars($_POST['password']);
+                $userClass = new User();
+                $result = $userClass->getUserByUsername($username);
+                if ($result) {
+                    if(password_verify($password, $result[0]['password'])){
+                        echo 'Logged in!';
+                    }else{
+                        echo 'Wrong passowrd!';
+                    }
+                }else{
+                    echo "User don't exist!";
+                }
             }
 
         }else{

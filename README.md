@@ -24,8 +24,8 @@ Authentication
 	PDO *
 	Password Crypt *
 	Username or email and password *
-	javascript login mensage
-	Session
+	javascript login mensage 
+	Session *
 	
 ROUTES
 TO_DO_CRUD

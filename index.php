@@ -30,7 +30,8 @@ switch($route){
                     header('Location: /dashboard');
                     die;
                 }else{
-                    header('Location: /login');
+                    $_SESSION['message'] = "Login error!";
+                    $controller->render('login');
                     die;
                 }
             }

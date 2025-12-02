@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,10 @@
                 <button id="login_btn" type="submit">Login</button>
             </div>
         </form>
+            <div id="message" hidden>
+            </div>
     </div>
     <script src="/Assets/login.js"> </script>
+    <?php if($_SESSION['message']){ echo '<script>error_message("'.$_SESSION['message'].'");</script>'; }?>
 </body>
 </html>

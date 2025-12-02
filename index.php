@@ -26,19 +26,9 @@ switch($route){
                     $controller->render('login');
                 }
             }
-
         }else{
             $controller->render('login');
         
-        }
-        break;
-    
-    case '/register':
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            echo 'Faça o cadastro!!!';
-        }else{
-            $controller = new ViewController();
-            $controller->render('register');
         }
         break;
 

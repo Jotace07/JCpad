@@ -2,30 +2,32 @@
 
 class AuthController {
 
-    public $is_auth = false;
     public $username;
     public $user_id;
 
-    public function login($username, $password){
-
+    public function login(): bool{
+        $username = htmlspecialchars($_POST['username']);
+        $password = htmlspecialchars($_POST['password']);
         $userClass = new User();
         $result = $userClass->getUserByUsername($username);
         if ($result) {
             if(password_verify($password, $result[0]['password'])){
+                $_SESSION['logged'] = true;
+                header('Location: /dashboard');
                 return true;
-            }else{
-                return false;
             }
-        }else{
-            return false;
         }
+
+        $_SESSION['message'] = "Login error!";
+        return false;
+        
     }
 
     public function register($username, $password){
         return "Realize o registro!";
     }
 
-    public function cehckAuth(){
-        return $this->is_auth;
+    public function checkAuth(){
+        echo 'ainda nao';
     }
-    }
+}

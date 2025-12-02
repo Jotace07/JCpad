@@ -10,9 +10,8 @@ $controller = new ViewController();
 switch($route){
     case '/':
         $auth = new AuthController();
-        if($auth->cehckAuth()){
-            echo 'Você já está autenticado.';
-            echo 'flag{cala_a_boca_corno}';
+        if($_SESSION['logged']){
+            header('Location: /dashboard');
         }else{
             header('Location: /login');
         }
@@ -21,18 +20,10 @@ switch($route){
     case '/login':
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if (isset($_POST['username']) && isset($_POST['password'])){
-                $username = htmlspecialchars($_POST['username']);
-                $password = htmlspecialchars($_POST['password']);
                 $auth = new AuthController();
-                $logged = $auth->login($username, $password);
-                if($logged){
-                    $_SESSION['logged'] = true;
-                    header('Location: /dashboard');
-                    die;
-                }else{
-                    $_SESSION['message'] = "Login error!";
+                $logged = $auth->login();
+                if($logged === false){
                     $controller->render('login');
-                    die;
                 }
             }
 
@@ -61,5 +52,5 @@ switch($route){
         break;
 
     default:
-        echo 'Página não encontrada!';
+        header('Location: /');
 }

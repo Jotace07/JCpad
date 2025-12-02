@@ -13,6 +13,7 @@ class AuthController {
         if ($result) {
             if(password_verify($password, $result[0]['password'])){
                 $_SESSION['logged'] = true;
+                $_SESSION['username'] = $result[0]['username'];
                 header('Location: /dashboard');
                 return true;
             }

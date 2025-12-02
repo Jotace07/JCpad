@@ -30,7 +30,6 @@ class User {
     
         
     public function __destruct(){
-
-        
+ 
     }
 }

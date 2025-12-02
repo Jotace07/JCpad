@@ -85,5 +85,5 @@ PRIMARY KEY (id));";
             "Error: " . $e->getMessage();
         }
     }
-}
 
+}

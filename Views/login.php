@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,7 @@
 <body class="login-page">
     <div class="login-container">
         <h2>Login</h2>
-        <!-- <form action="#" method="post"> The 'action' attribute should point to your server-side script -->
+        <form action="/login" method="post">
             <div class="form-group">
                 <label for="username">Username or Email:</label>
                 <input type="text" id="username" name="username" placeholder="Digite seu nome de usuário" required>
@@ -21,10 +21,13 @@
                 <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
             </div>
             <div class="form-group">
-                <button id="login_btn" type="button" onclick="fazerLogin()">Login</button>
+                <button id="login_btn" type="submit">Login</button>
             </div>
         </form>
+            <div id="message" hidden>
+            </div>
     </div>
     <script src="/Assets/login.js"> </script>
+    <?php if($_SESSION['message']){ echo '<script>error_message("'.$_SESSION['message'].'");</script>'; }?>
 </body>
 </html>

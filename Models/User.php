@@ -1,35 +1,36 @@
 <?php
 
 class User {
+    
+    private $db;
     public $id;
     public $username;
     public $password;
     public $connectinon;
 
     public function __construct(){
-        $this->connectinon = new mysqli('192.168.20.106', 'jc_database', 'jc', 'jc_company');
+        $this->db = Database::connect();
     }
 
     public function getAll(){
         $sql = "SELECT * FROM users";
-        $result = $this->connectinon->query($sql);
-        $users = [];
-        while($row = $result->fetch_assoc()){
-            $users[] = $row;
-        }
+        $users = $this->db->query($sql)->fetchAll();
         return $users;
     }
 
     public function getUserByUsername($username){
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-        $result = $this->connectinon->query($sql);
-        $user = $result->fetch_assoc();
+        $sql = "SELECT * FROM users WHERE username = :username OR email = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $username);
+        $stmt->execute();
+        $user = $stmt->fetchAll();
         return $user;
-    } 
+    }
+    
         
-
     public function __destruct(){
 
-        $this->connectinon->close();
+        
     }
 }

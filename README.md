@@ -22,9 +22,14 @@ login admin (username || email,password) -> dashboard {
 master
 Authentication
 	PDO *
+<<<<<<< HEAD
 	Password Crypt *
 	Username or email and password *
 	javascript login mensage 
+=======
+	Username or email and password *
+	javascript login mensage *
+>>>>>>> Authentication
 	Session *
 	
 ROUTES
@@ -32,3 +37,7 @@ TO_DO_CRUD
 UPLOAD_FILE
 USER_PROFILE
 USER_MANAGER
+<<<<<<< HEAD
+=======
+	Password Crypt
+>>>>>>> Authentication

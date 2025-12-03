@@ -18,7 +18,7 @@
                 <textarea id="noteContent" placeholder="Escreva sua nota aqui..."></textarea>
             </div>
             <div class="actions">
-                <button class="btn-save" id="saveBtn" onclick="saveNote()">Salvar Nota</button>
+                <button class="btn-save" id="saveBtn" onclick="handleForm()">Salvar Nota</button>
             </div>
         </div>
 

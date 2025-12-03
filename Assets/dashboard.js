@@ -1,5 +1,7 @@
 // --- Estado da Aplicação ---
         let notes = [];
+        let oldTitle = ''
+        let editing = false;
         let editingId = null; // Se não for null, estamos editando
 
         // Inicializa (carrega do localStorage se quiser persistência, aqui faremos em memória)
@@ -137,33 +139,47 @@
         }
 
         function editNote(id) {
+            editing = true;
             const note = notes.find(n => n.id === id);
             if (note) {
-                let newTitle = document.getElementById('noteTitle').value;
-                let newNote = document.getElementById('noteContent').value;
+                oldTitle = note.title;
+                document.getElementById('noteTitle').value = note.title;
+                document.getElementById('noteContent').value = note.note;
                 document.getElementById('noteTitle').focus();
                 
                 // Configura estado de edição
                 editingId = id;
                 document.getElementById('saveBtn').innerText = "Atualizar Nota";
+                
+                // Rola para o topo suavemente
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function handleForm(){
+            if(editing === false){
+                saveNote();
+            }else{
+                const note = notes.find(n => n.id === id);
+                document.getElementById('noteTitle').value = note.title;
+                document.getElementById('noteContent').value = note.note;
 
                 let data = new URLSearchParams();
-                data.append(`oldTitle`, note.title);
-                data.append(`oldContent`, note.note);
-		        data.append(`newTitle`, newTitle);
-		        data.append(`newNote`, newNote);
+                data.appen(`oldTitle`, note.title);
+                data.appen(`oldContent`, note.note);
+		        data.appen(`newTitle`, newTitle);
+		        data.appen(`newNote`, newNote);
                 data.append(`editNote`, true);
 
                 const options = {
                     method: 'POST',
                     body: data
                 }
-                fetch('/crud', options) 
-                
-                // Rola para o topo suavemente
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                fetch('/crud', options)                
             }
         }
+
+        
 
         function deleteNote(id) {
             if(confirm("Tem certeza que deseja excluir esta nota?")) {

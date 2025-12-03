@@ -48,7 +48,7 @@ switch($route){
                 $crud->saveNotes();
             }
 
-            if(isset($_POST['noteTitle']) && isset($_POST['noteContent']) && isset($_POST['editNote'])){
+            if(isset($_POST['oldTitle']) && isset($_POST['oldContent']) && isset($_POST['newTitle']) && isset($_POST['newNote']) && isset($_POST['editNote'])){
                 $crud->updateNotes();
             }
             

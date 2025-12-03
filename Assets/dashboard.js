@@ -21,7 +21,6 @@
                 return;
             }else{
                 let data = new URLSearchParams()
-                data.append(`username`, username)
                 data.append(`noteTitle`, title)
                 data.append(`noteContent`, content)
                 data.append(`saveNote`, true)
@@ -140,13 +139,26 @@
         function editNote(id) {
             const note = notes.find(n => n.id === id);
             if (note) {
-                document.getElementById('noteTitle').value = note.title;
-                document.getElementById('noteContent').value = note.note;
+                let newTitle = document.getElementById('noteTitle').value;
+                let newNote = document.getElementById('noteContent').value;
                 document.getElementById('noteTitle').focus();
                 
                 // Configura estado de edição
                 editingId = id;
                 document.getElementById('saveBtn').innerText = "Atualizar Nota";
+
+                let data = new URLSearchParams();
+                data.append(`oldTitle`, note.title);
+                data.append(`oldContent`, note.note);
+		        data.append(`newTitle`, newTitle);
+		        data.append(`newNote`, newNote);
+                data.append(`editNote`, true);
+
+                const options = {
+                    method: 'POST',
+                    body: data
+                }
+                fetch('/crud', options) 
                 
                 // Rola para o topo suavemente
                 window.scrollTo({ top: 0, behavior: 'smooth' });

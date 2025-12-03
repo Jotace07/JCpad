@@ -26,10 +26,11 @@ class CrudController {
 
     public function updateNotes(){
         $username = $_SESSION['username'];
-        $title = $_POST['noteTitle'];
-        $note = $_POST['noteContent'];
-        $save = $this->noteClass->saveNotesByUsername($username, $title, $note);
-        return $save;
+        $oldTitle = $_POST['oldTitle'];
+        $newTitle = $_POST['newTitle'];
+        $newNote = $_POST['newNote'];
+        $this->noteClass->updateNotesByUsername($username, $oldTitle, $newTitle, $newNote);
+        
     }
 
     public function deleteNotes(){

@@ -6,6 +6,7 @@ require_once 'autoload.php';
 
 $route = $_SERVER['REQUEST_URI'];
 $controller = new ViewController();
+$crud = new CrudController();
 
 switch($route){
     case '/':
@@ -40,7 +41,27 @@ switch($route){
         $controller->render('dashboard');
     }
         break;
+    
+    case '/crud':
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            if(isset($_POST['noteTitle']) && isset($_POST['noteContent']) && isset($_POST['saveNote'])){
+                $crud->saveNotes();
+            }
 
+            if(isset($_POST['noteTitle']) && isset($_POST['noteContent']) && isset($_POST['editNote'])){
+                $crud->updateNotes();
+            }
+            
+            if(isset($_POST['getNotes'])){
+                $crud->getNotes();
+            }
+
+            if(isset($_POST['noteTitle']) && isset($_POST['deleteNotes'])){
+                $crud->deleteNotes();
+            }  
+        }
+
+        break;
     default:
         header('Location: /');
 }

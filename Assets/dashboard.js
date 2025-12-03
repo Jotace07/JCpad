@@ -21,6 +21,7 @@
                 return;
             }else{
                 let data = new URLSearchParams()
+                data.append(`username`, username)
                 data.append(`noteTitle`, title)
                 data.append(`noteContent`, content)
                 data.append(`saveNote`, true)
@@ -62,27 +63,41 @@
             const listEl = document.getElementById('notesList');
             listEl.innerHTML = '';
 
-            if (notes.length === 0) {
-                listEl.innerHTML = '<p style="text-align:center; color: var(--text-secondary)">Nenhuma nota salva.</p>';
-                return;
-            }
+            let data = new URLSearchParams()
+            data.append(`getNotes`, true)
 
-            notes.forEach(note => {
-                const item = document.createElement('div');
-                item.className = 'note-item';
-                item.innerHTML = `
-                    <div class="note-title">${note.title}</div>
-                    <div class="menu-container">
-                        <button class="kebab-btn" onclick="toggleMenu(${note.id})">⋮</button>
-                        <div id="menu-${note.id}" class="dropdown-menu">
-                            <div class="dropdown-item" onclick="viewNote(${note.id})">Visualizar</div>
-                            <div class="dropdown-item" onclick="editNote(${note.id})">Editar</div>
-                            <div class="dropdown-item delete" onclick="deleteNote(${note.id})">Excluir</div>
-                        </div>
-                    </div>
-                `;
-                listEl.appendChild(item);
-            });
+            const options = {
+                method: 'POST',
+                body: data
+            }
+            fetch('/crud', options).then(function (response){
+                return response.json();
+                
+            }).then(function (json){
+                    notes = json;
+                    
+                    if (notes.length === 0) {
+                        listEl.innerHTML = '<p style="text-align:center; color: var(--text-secondary)">Nenhuma nota salva.</p>';
+                        return;
+                    }
+                
+                    notes.forEach(note => {
+                        const item = document.createElement('div');
+                        item.className = 'note-item';
+                        item.innerHTML = `
+                            <div class="note-title">${note.title}</div>
+                            <div class="menu-container">
+                                <button class="kebab-btn" onclick="toggleMenu(${note.id})">⋮</button>
+                                <div id="menu-${note.id}" class="dropdown-menu">
+                                    <div class="dropdown-item" onclick="viewNote(${note.id})">Visualizar</div>
+                                    <div class="dropdown-item" onclick="editNote(${note.id})">Editar</div>
+                                    <div class="dropdown-item delete" onclick="deleteNote(${note.id})">Excluir</div>
+                                </div>
+                            </div>
+                        `;
+                        listEl.appendChild(item);
+                    });
+                })
         }
 
         // --- Ações do Menu ---
@@ -117,7 +132,7 @@
             const note = notes.find(n => n.id === id);
             if (note) {
                 document.getElementById('modalTitle').innerText = note.title;
-                document.getElementById('modalBody').innerText = note.content;
+                document.getElementById('modalBody').innerText = note.note;
                 document.getElementById('viewModal').style.display = 'flex';
             }
         }
@@ -126,7 +141,7 @@
             const note = notes.find(n => n.id === id);
             if (note) {
                 document.getElementById('noteTitle').value = note.title;
-                document.getElementById('noteContent').value = note.content;
+                document.getElementById('noteContent').value = note.note;
                 document.getElementById('noteTitle').focus();
                 
                 // Configura estado de edição
@@ -140,16 +155,27 @@
 
         function deleteNote(id) {
             if(confirm("Tem certeza que deseja excluir esta nota?")) {
-                notes = notes.filter(n => n.id !== id);
+                const note = notes.find(n => n.id === id);
                 // Se estávamos editando essa nota, cancela a edição
-                if (editingId === id) {
-                    editingId = null;
-                    document.getElementById('saveBtn').innerText = "Salvar Nota";
-                    document.getElementById('noteTitle').value = '';
-                    document.getElementById('noteContent').value = '';
+                // if (editingId === id) {
+                    // editingId = null;
+                    // document.getElementById('saveBtn').innerText = "Salvar Nota";
+                    // document.getElementById('noteTitle').value = '';
+                    // document.getElementById('noteContent').value = '';
+
+                let data = new URLSearchParams()
+                data.append(`noteTitle`, note.title)
+                data.append(`deleteNotes`, true)
+
+                const options = {
+                    method: 'POST',
+                    body: data
                 }
-                renderNotes();
+                fetch('/crud', options)                    
+
             }
+            renderNotes();
+            
         }
 
         // --- Modal Utils ---

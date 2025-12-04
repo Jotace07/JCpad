@@ -23,10 +23,8 @@ switch($route){
             if (isset($_POST['username']) && isset($_POST['password'])){
                 $auth = new AuthController();
                 $logged = $auth->login();
-                if($logged === false){
-                    $controller->render('login');
-                }
             }
+        
         }else{
             $controller->render('login');
         

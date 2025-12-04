@@ -21,6 +21,7 @@ class AuthController {
         }
 
         $_SESSION['message'] = "Login error!";
+        header('Location: /login');
         return false;
         
     }

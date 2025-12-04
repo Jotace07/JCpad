@@ -1,0 +1,36 @@
+PDO *
+
+login user (username || email,password) -> dashboard { 
+			bloco de notas = (text | uploadfile attachment) -> CRUD
+			profile (update profile)
+			logout
+		   }
+		   
+login admin (username || email,password) -> dashboard { 
+			bloco de notas = (text | uploadfile attachment) -> CRUD
+			profile (update profile)
+			view and delete users notes
+			manager users
+			logout			
+		   }
+		   
+
+master
+Authentication
+	PDO *
+	Password Crypt *
+	Username or email and password *
+	javascript login mensage *
+	Session *
+	
+ROUTES
+	/crud *
+TO_DO_CRUD
+	read *
+	delete *
+	edit
+
+UPLOAD_FILE
+USER_PROFILE
+USER_MANAGER
+	Password Crypt

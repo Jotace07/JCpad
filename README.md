@@ -1,34 +1,3 @@
-# Foi neste estado que o HC deixou o MVC: ~~Inclompleto...~~
+# JCpad
+### JCpad is a TodoMVC that I created during my development training; however, you can use it to create CTFs, simulate a basic application, and even for educational purposes. Be creative!
 
-
-PDO
-
-login user (username || email,password) -> dashboard { 
-			bloco de notas = (text | uploadfile attachment) -> CRUD
-			profile (update profile)
-			logout
-		   }
-		   
-login admin (username || email,password) -> dashboard { 
-			bloco de notas = (text | uploadfile attachment) -> CRUD
-			profile (update profile)
-			view and delete users notes
-			manager users
-			logout			
-		   }
-		   
-
-master
-Authentication
-	PDO *
-	Password Crypt *
-	Username or email and password *
-	javascript login mensage 
-	Session *
-	
-ROUTES
-TO_DO_CRUD
-UPLOAD_FILE
-USER_PROFILE
-USER_MANAGER
-	Password Crypt

@@ -1,4 +1,8 @@
-<?php echo "<script> let username  </script>" ;?>
+<?php if($_SESSION['role'] === 'admin'){
+    header('Location: /admin');
+    die;
+}?> 
+
 <script src="/Assets/dashboard.js"> </script>
 
 <!DOCTYPE html>

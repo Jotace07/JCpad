@@ -1,3 +1,6 @@
+<?php echo "<script> let username  </script>" ;?>
+<script src="/Assets/dashboard.js"> </script>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,6 +12,13 @@
     
 </head>
 <body class="dashboard-page">
+    
+    <div class="profile-container">
+        <div class="profile-avatar">
+            👤
+        </div>
+    </div>
+    
     <div class="container">
         <h2>Minhas Notas</h2>
 
@@ -37,7 +47,6 @@
             </div>
         </div>
     </div>
-    <script src="/Assets/dashboard.js"> </script>
 
 </body>
 </html>

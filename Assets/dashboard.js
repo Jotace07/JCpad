@@ -1,12 +1,12 @@
 // --- Estado da Aplicação ---
-        let notes = [];
-        let oldTitle = ''
-        let editing = false;
-        let editingId = null; // Se não for null, estamos editando
+let notes = [];
+let oldTitle = ''
+let editing = false;
+let editingId = null; // Se não for null, estamos editando
 
-        // Inicializa (carrega do localStorage se quiser persistência, aqui faremos em memória)
-        // notes = JSON.parse(localStorage.getItem('myNotes')) || [];
-        renderNotes();
+document.addEventListener('DOMContentLoaded', (event) => {
+    renderNotes(); 
+});
 
         // --- Funções Principais ---
 

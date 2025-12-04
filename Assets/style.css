@@ -327,3 +327,39 @@ body.login-page {
             cursor: pointer;
             color: var(--text-secondary);
         }
+            
+                /* --- Estilos para o Avatar de Perfil --- */
+        .profile-container {
+            /* Posicionamento fixo no canto superior direito */
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100; /* Garante que fique acima de outros elementos do conteúdo */
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .profile-container:hover {
+            transform: scale(1.05); /* Efeito sutil ao passar o mouse */
+        }
+        
+        .profile-avatar {
+            /* Estilo da bolinha de perfil genérica */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; /* Transforma em círculo perfeito */
+            
+            /* Cores usando as variáveis do Dashboard */
+            background-color: var(--accent); /* Cor de destaque para o fundo da bolinha */
+            color: var(--bg-body); /* Cor do ícone, contrastando com o fundo */
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: var(--shadow); /* Usando a sombra predefinida */
+            
+            /* Se estiver usando o ícone '👤' (HTML), ajuste o line-height para centralizar */
+            line-height: 1; 
+        }

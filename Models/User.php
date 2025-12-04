@@ -27,9 +27,4 @@ class User {
         $user = $stmt->fetchAll();
         return $user;
     }
-    
-        
-    public function __destruct(){
- 
-    }
 }

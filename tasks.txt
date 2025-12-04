@@ -28,7 +28,7 @@ ROUTES
 TO_DO_CRUD
 	read *
 	delete *
-	edit
+	edit *
 
 UPLOAD_FILE
 USER_PROFILE

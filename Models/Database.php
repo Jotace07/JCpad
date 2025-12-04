@@ -91,17 +91,14 @@ class Database {
             username VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL,
             role VARCHAR(32) NULL,
-            PRIMARY KEY (id)
-        ) ENGINE=InnoDB;";
+            PRIMARY KEY (id))";
 
         $create_table_notes = "CREATE TABLE IF NOT EXISTS notes (
             id INT NOT NULL AUTO_INCREMENT,
-            user_id INT NOT NULL,
+            username VARCHAR(255) NOT NULL,
             title VARCHAR(64) NOT NULL,
             note TEXT NOT NULL,
-            PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        ) ENGINE=InnoDB;";
+            PRIMARY KEY (id));";
         
         try {
             $pdo = self::connect();

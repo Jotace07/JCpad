@@ -28,6 +28,11 @@
             </div>
     </div>
     <script src="/Assets/login.js"> </script>
-    <?php if($_SESSION['message']){ echo '<script>error_message("'.$_SESSION['message'].'");</script>'; }?>
+    <?php 
+    if($_SESSION['message']){ 
+        echo '<script>error_message("'.$_SESSION['message'].'");</script>';
+        unset($_SESSION['message']);
+    }   
+    ?>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?php    
+<?php
 
 class Database {
     private static $host = 'localhost';
@@ -6,20 +6,21 @@ class Database {
     private static $username = 'jc_database';
     private static $password = 'jc';
 
-    /**
-    *@return PDO|null 'retornar null em caso de falha'.
-    */
+    private static $admin_user = 'root';
+    private static $admin_pass = '<change_with_your_root_password>';
 
+    // ... (restante da classe)
+
+    /**
+     * @return PDO|null Conecta-se ao banco de dados 'jc_company' usando o usuário 'jc_database'.
+     */
     public static function connect() {
         $dsn = "mysql:host=" . self::$host . ";dbname=" . self::$database . ";charset=utf8mb4";
-
+        // Opções PDO...
         $options = [
-            // Garante que o PDO lança exceções em caso de erros
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            // Define o modo de retorno padrão como array associativo
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            // Desativa a preparação de comandos (emulações) para segurança
-            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
         try {
@@ -27,40 +28,104 @@ class Database {
             return $pdo;
         }
         catch (\PDOException $e){
-            echo "Error while connecting in mysql: " . $e->getMessage();
+            echo "Error while connecting to the database: " . $e->getMessage();
             return null;
         }
-
     }
 
-    public function create_table(){
-
-        $admin = 'admin';
-        $guest = 'guest';
-        $email_admin = 'admin@email.com';
-        $email_guest = 'guest@email.com';
-
-        $create_table_users = "create table if not exists users (
-id INT NOT NULL AUTO_INCREMENT,
-email VARCHAR(32) NOT NULL,
-username VARCHAR(32) NOT NULL,
-password VARCHAR(32) NOT NULL,
-role VARCHAR(32) NULL,
-PRIMARY KEY (id));";
+    /**
+     * @return PDO|null Conecta-se como root para criar o DB e o usuário.
+     */
+    private static function connect_admin() {
+        $dsn = "mysql:host=" . self::$host . ";charset=utf8mb4";
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ];
 
         try {
+            $pdo = new PDO($dsn, self::$admin_user, self::$admin_pass, $options);
+            return $pdo;
+        }
+        catch (\PDOException $e){
+            echo "Error while connecting as ADMIN: " . $e->getMessage();
+            return null;
+        }
+    }
+
+
+    public function create_tables(){
+        
+        $admin = 'admin';
+        $guest = 'user';
+        $email_admin = 'admin@admin.com';
+        $email_guest = 'user@user.com';
+
+        $create_jc_company_db = "CREATE DATABASE IF NOT EXISTS " . self::$database . ";";
+        $create_jc_databse_user = "CREATE USER IF NOT EXISTS '" . self::$username . "'@'" . self::$host . "' IDENTIFIED BY '" . self::$password . "';";
+        $grant_privileges = "GRANT ALL PRIVILEGES ON " . self::$database . ".* TO '" . self::$username . "'@'" . self::$host . "';";
+        $flush_privileges = "FLUSH PRIVILEGES;"; 
+
+        try {
+            $pdo_admin = self::connect_admin(); 
+            
+            if ($pdo_admin) {
+                $pdo_admin->exec($create_jc_company_db);
+                $pdo_admin->exec($create_jc_databse_user);
+                $pdo_admin->exec($grant_privileges);
+                $pdo_admin->exec($flush_privileges);
+                echo "Database and user were created!";
+            } else {
+                echo "Failed to connect as admin, cannot create DB/User.";
+                return;
+            }
+        }
+        catch (\PDOException $e){
+            echo "Error creating database or user: " . $e->getMessage();
+            return;
+        }
+
+        $create_table_users = "CREATE TABLE IF NOT EXISTS users (
+            id INT NOT NULL AUTO_INCREMENT,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            username VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            role VARCHAR(32) NULL,
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB;";
+
+        $create_table_notes = "CREATE TABLE IF NOT EXISTS notes (
+            id INT NOT NULL AUTO_INCREMENT,
+            user_id INT NOT NULL,
+            title VARCHAR(64) NOT NULL,
+            note TEXT NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB;";
+        
+        try {
             $pdo = self::connect();
-            $pdo->exec($create_table_users);
-            echo "Table users was created!";
+            
+            if ($pdo) {
+                $pdo->exec($create_table_users);
+                echo "Table users was created!";
+                
+                $pdo->exec($create_table_notes);
+                echo "Table notes was created!";
+            } else {
+                echo "Failed to connect to jc_company, cannot create tables.";
+                return;
+            }
         }
         catch (\PDOException $e){
             echo "Error creating table: " . $e->getMessage();
+            return;
         }
-
+        
         $bcryptInAdmin = password_hash($admin, PASSWORD_BCRYPT);
-        $create_admin = $pdo->prepare("INSERT INTO users (username, password) VALUES (:email, :username, :password)");
+        $create_admin = $pdo->prepare("INSERT INTO users (email, username, password, role) VALUES (:email, :username, :password, 'admin')");
         $create_admin->bindParam(':email', $email_admin);
-        $create_admin->bindParam(':username',  $admin);
+        $create_admin->bindParam(':username', $admin);
         $create_admin->bindParam(':password', $bcryptInAdmin);
 
         try {
@@ -68,11 +133,12 @@ PRIMARY KEY (id));";
             echo 'Admin user was created!';
         }
         catch (\PDOException $e){
-            "Error: " . $e->getMessage();
+            // Usei 'echo' aqui, pois a linha no seu código original estava faltando.
+            echo "Error creating admin user: " . $e->getMessage(); 
         }
         
         $bcryptInGuest = password_hash($guest, PASSWORD_BCRYPT);
-        $create_Guest = $pdo->prepare("INSERT INTO users (email, username, password) VALUES (:email, :username, :password)");
+        $create_Guest = $pdo->prepare("INSERT INTO users (email, username, password, role) VALUES (:email, :username, :password, 'user')");
         $create_Guest->bindParam(':email', $email_guest);
         $create_Guest->bindParam(':username', $guest);
         $create_Guest->bindParam(':password', $bcryptInGuest);
@@ -82,7 +148,7 @@ PRIMARY KEY (id));";
             echo 'Guest user was created!';
         }
         catch (\PDOException $e){
-            "Error: " . $e->getMessage();
+            echo "Error creating guest user: " . $e->getMessage();
         }
     }
 

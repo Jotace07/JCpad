@@ -157,25 +157,37 @@
         }
 
         function handleForm(){
+            
+            const titleInput = document.getElementById('noteTitle');
+            const contentInput = document.getElementById('noteContent');
+
             if(editing === false){
                 saveNote();
             }else{
-                const note = notes.find(n => n.id === id);
-                document.getElementById('noteTitle').value = note.title;
-                document.getElementById('noteContent').value = note.note;
+                const note = notes.find(n => n.id === editingId);
+                if(note){
+                    const newTitle = titleInput.value.trim();
+                    const newNote = contentInput.value.trim();
 
-                let data = new URLSearchParams();
-                data.appen(`oldTitle`, note.title);
-                data.appen(`oldContent`, note.note);
-		        data.appen(`newTitle`, newTitle);
-		        data.appen(`newNote`, newNote);
-                data.append(`editNote`, true);
+                    let data = new URLSearchParams();
+                    data.append(`oldTitle`, note.title);
+                    data.append(`oldContent`, note.note);
+		            data.append(`newTitle`, newTitle);
+		            data.append(`newNote`, newNote);
+                    data.append(`editNote`, true);
 
-                const options = {
+                    const options = {
                     method: 'POST',
                     body: data
+                    }
+                    fetch('/crud', options)
+                    editing = false;
+                    editingId = null;
+                    document.getElementById('saveBtn').innerText = "Salvar Nota";
+                    titleInput.value = '';
+                    contentInput.value = '';
+                    renderNotes();
                 }
-                fetch('/crud', options)                
             }
         }
 

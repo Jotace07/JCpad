@@ -54,7 +54,7 @@ class Database {
     }
 
 
-    public function create_tables(){
+    public static function create_tables(){
         
         $admin = 'admin';
         $guest = 'user';
@@ -153,3 +153,6 @@ class Database {
     }
 
 }
+
+// Uncomment the line below and type "php ./Models/Database.php" in your terminal if you want to create the database and tables used in JCpad!
+// Database::create_tables();

@@ -1,12 +1,12 @@
-// --- Estado da Aplicação ---
-        let notes = [];
-        let oldTitle = ''
-        let editing = false;
-        let editingId = null; // Se não for null, estamos editando
+let notes = [];
+let oldTitle = ''
+let editing = false;
+let editingId = null; // Se não for null, estamos editando
+// let username = null;
 
-        // Inicializa (carrega do localStorage se quiser persistência, aqui faremos em memória)
-        // notes = JSON.parse(localStorage.getItem('myNotes')) || [];
-        renderNotes();
+document.addEventListener('DOMContentLoaded', (event) => {
+    renderNotes();
+});
 
         // --- Funções Principais ---
 
@@ -76,12 +76,13 @@
                 
             }).then(function (json){
                     notes = json;
-                    
+                    // username = json[0].username;
+
                     if (notes.length === 0) {
                         listEl.innerHTML = '<p style="text-align:center; color: var(--text-secondary)">Nenhuma nota salva.</p>';
                         return;
                     }
-                
+                    
                     notes.forEach(note => {
                         const item = document.createElement('div');
                         item.className = 'note-item';

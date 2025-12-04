@@ -14,6 +14,7 @@ class AuthController {
             if(password_verify($password, $result[0]['password'])){
                 $_SESSION['logged'] = true;
                 $_SESSION['username'] = $result[0]['username'];
+                $_SESSION['role'] = $result[0]['role'];
                 header('Location: /dashboard');
                 return true;
             }

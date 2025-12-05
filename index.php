@@ -64,6 +64,7 @@ switch($route){
         case '/admin':
             if($_SESSION['logged'] && $_SESSION['role'] === 'admin'){
                 $controller->render('admin');
+                die;
             }
             header('Location: /login');
             break;

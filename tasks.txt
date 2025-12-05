@@ -29,6 +29,7 @@ TO_DO_CRUD
 	read *
 	delete *
 	edit *
+	logout button
 
 UPLOAD_FILE
 USER_PROFILE
